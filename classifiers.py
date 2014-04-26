@@ -127,7 +127,8 @@ class classifiers:
         # print type(predictor), len(predictor), predictor
         testTime = time() - t0
         print 'test time: %0.3fs' % testTime
-        print 'Predicted category: ' + categories[predictor[0]]
+        print 'Predicted category: ' + categories[predictor[0]], 'the number of category is:', predictor[0]
+        return predictor[0]
         
         
 

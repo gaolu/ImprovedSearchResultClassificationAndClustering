@@ -2,7 +2,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.feature_extraction.text import HashingVectorizer
 from sklearn.feature_selection import SelectKBest, chi2
 from time import time
-
+import numpy as np
 class dataProcessor:
     def processData(self):
         return
@@ -41,3 +41,27 @@ class dataProcessor:
         print('done in %fs' % (time() - t0))
         print
         return dataTrain, dataTest
+        
+    def getCenter(self, dataTrain, labelTrain):
+        # format cat:[list of file numbers]
+        categoryDict = {}
+        
+        for fileNo in range(len(labelTrain)):
+            if labelTrain[fileNo] in categoryDict:
+                categoryDict[labelTrain[fileNo]].append(dataTrain[fileNo].todense())
+            else:
+                labelList = []
+                labelList.append(dataTrain[fileNo].todense())
+                categoryDict[labelTrain[fileNo]] = labelList
+                
+        categoryCenter = {}
+        print len(categoryDict)
+        for category, fileList in categoryDict.iteritems():
+            print category
+            avg = np.mean(fileList, axis=0)
+            print type(avg), len(avg[0]), avg[0]
+            categoryCenter[category] = avg[0]
+        # print len(categoryCenter), type(categoryCenter[0]), len(categoryCenter[0]), categoryCenter[0]
+        return categoryCenter
+                
+                

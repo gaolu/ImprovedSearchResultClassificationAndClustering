@@ -7,7 +7,8 @@ from resultPlot import *
 from queryClassifier import *
 from optparse import OptionParser
 import numpy as np
-
+import csv
+from time import time
 # temp
 from sklearn.naive_bayes import BernoulliNB, MultinomialNB
 
@@ -27,6 +28,8 @@ def main():
     trainDataSize = myDataLoader.sizeMb(trainData.data)
     testDataSize = myDataLoader.sizeMb(testData.data)
     
+    # print type(trainData), type(testData)
+    
     myDataLoader.printFileSize(trainData, trainDataSize, testData, testDataSize, categories)
     
     labelTrain = trainData.target
@@ -36,6 +39,29 @@ def main():
     
     dataTrain, vectorizer = myDataProcessor.trainFeatureExtract(opts, trainData, trainDataSize)
     
+    # print 'vectorizer is:', vectorizer
+    
+    # classCenter = myDataProcessor.getCenter(dataTrain, labelTrain)
+    
+    # f=open('classCenter.txt','w')
+    # for i in classCenter.keys():
+    #     f.write(repr(i))
+    #     for n in classCenter[i]:
+    #         f.write(' %s'%(repr(n)))
+    #     f.write('\n')
+    # f.close()
+    print 'loading class centers...'
+    time0 = time()
+    classCenter = {}
+    with open('classCenter.txt', 'r') as file:
+        for line in file:
+            elementList = line.rstrip().split()
+            category = int(elementList[0])
+            dataList = [float(element) for element in elementList[1 : ]]
+            # print len(dataList)
+            classCenter[category] = dataList
+    timeSpan = time() - time0
+    print 'done in', timeSpan, 'seconds'
     # dataTest = myDataProcessor.testFeatureExtract(opts, testData, testDataSize, vectorizer)
     
     # print dataTest.shape
@@ -60,8 +86,13 @@ def main():
     # if opts.select_chi2:
     #     dataTrain, vectorQuery = myDataProcessor.chiFeatueSel(opts, dataTrain, labelTrain, vectorQuery)
     
+    queryFile = './queries.txt'
+    queryList = myDataLoader.loadQuery(queryFile)
+    
     myQueryClassifier = queryClassifier()
-    myQueryClassifier.classifyQuery(opts, dataTrain, labelTrain, vectorizer, featureNames, categories)
+    myQueryClassifier.classifyQuery(opts, dataTrain, labelTrain, vectorizer, featureNames, categories, trainData, testData, queryList, classCenter)
+    
+    # queryFile = './queries.txt'
     
     sys.exit(1)
     

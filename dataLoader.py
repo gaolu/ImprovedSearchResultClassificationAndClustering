@@ -37,3 +37,10 @@ class dataLoader:
         print('%d documents - %0.3fMB (test set)' % (len(testData.data), testDataSize))
         print('%d categories' % len(categories))
         print
+    
+    def loadQuery(self, fileName):
+        with open(fileName) as file:
+            content = file.readlines()
+        query = [query.rstrip() for query in content if query != '\n']
+        queryList = list(set(query))
+        return queryList
