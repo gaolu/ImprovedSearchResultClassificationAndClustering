@@ -90,7 +90,9 @@ def main():
     queryList = myDataLoader.loadQuery(queryFile)
     
     myQueryClassifier = queryClassifier()
-    myQueryClassifier.classifyQuery(opts, dataTrain, labelTrain, vectorizer, featureNames, categories, trainData, testData, queryList, classCenter)
+    # for firstN in range(10):
+    firstN = 5
+    myQueryClassifier.classifyQuery(opts, dataTrain, labelTrain, vectorizer, featureNames, categories, trainData, testData, queryList, classCenter, firstN)
     
     # queryFile = './queries.txt'
     
