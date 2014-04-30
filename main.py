@@ -9,8 +9,6 @@ from optparse import OptionParser
 import numpy as np
 import csv
 from time import time
-# temp
-from sklearn.naive_bayes import BernoulliNB, MultinomialNB
 
 def main():
     # set log format
@@ -91,7 +89,7 @@ def main():
     
     myQueryClassifier = queryClassifier()
     # for firstN in range(10):
-    firstN = 5
+    firstN = 4
     myQueryClassifier.classifyQuery(opts, dataTrain, labelTrain, vectorizer, featureNames, categories, trainData, testData, queryList, classCenter, firstN)
     
     # queryFile = './queries.txt'
